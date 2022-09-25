@@ -1,0 +1,4 @@
+name: 'Z-Wave Keypad'
+packageKey: 'zwave-keypad'
+permissions:
+  zwave: {}

@@ -1,0 +1,336 @@
+name: ring-gen2
+components:
+- id: main
+  capabilities:
+  - id: refresh
+    version: 1
+  - id: motionSensor
+    version: 1
+  - id: powerSource
+    version: 1
+  - id: alarm
+    version: 1
+  - id: securitySystem
+    version: 1
+  - id: battery
+    version: 1
+  categories:
+    - name: RemoteController
+- id: burglarAlarm
+  capabilities:
+  - id: alarm
+    version: 1
+- id: fireAlarm
+  capabilities:
+  - id: alarm
+    version: 1
+- id: carbonMonoxideAlarm
+  capabilities:
+  - id: alarm
+    version: 1
+- id: medicalAlarm
+  capabilities:
+  - id: alarm
+    version: 1
+- id: freezeAlarm
+  capabilities:
+  - id: alarm
+    version: 1
+- id: waterLeakAlarm
+  capabilities:
+  - id: alarm
+    version: 1
+- id: freezeAndWaterAlarm
+  capabilities:
+  - id: alarm
+    version: 1
+- id: disarmAllButton
+  capabilities:
+  - id: button
+    version: 1
+  categories:
+    - name: RemoteController
+- id: armHomeButton
+  capabilities:
+  - id: button
+    version: 1
+  categories:
+    - name: RemoteController
+- id: armAwayButton
+  capabilities:
+  - id: button
+    version: 1
+  categories:
+    - name: RemoteController
+- id: policeButton
+  capabilities:
+  - id: button
+    version: 1
+  categories:
+    - name: RemoteController
+- id: fireButton
+  capabilities:
+  - id: button
+    version: 1
+  categories:
+    - name: RemoteController
+- id: alertMedicalButton
+  capabilities:
+  - id: button
+    version: 1
+  categories:
+    - name: RemoteController
+- id: panicCombination
+  capabilities:
+  - id: button
+    version: 1
+  categories:
+    - name: RemoteController
+- id: bypassRequired
+  capabilities:
+  - id: tone
+    version: 1
+- id: entryDelay
+  capabilities:
+  - id: tone
+    version: 1
+- id: exitDelay
+  capabilities:
+  - id: tone
+    version: 1
+- id: monitoringActivated
+  capabilities:
+  - id: tone
+    version: 1
+  categories:
+    - name: VoiceAssistance
+- id: doorBell
+  capabilities:
+  - id: chime
+    version: 1
+  categories:
+  - name: DoorBell
+# commented out due to the limit of 20 components
+#- id: notifyingContacts
+#  capabilities:
+#  - id: tone
+#    version: 1
+#  categories:
+#    - name: VoiceAssistance
+#- id: alertAcknowledged
+#  capabilities:
+#  - id: tone
+#    version: 1
+#  categories:
+#    - name: VoiceAssistance
+preferences:
+  - title: "PIN"
+    name: pin
+    description: "PIN for disarming and arming home"
+    required: true
+    preferenceType: string
+    definition:
+      stringType: "password"
+      default: "0000"
+      minLength: 0
+      maxLength: 8
+  - title: "Entry delay (s)"
+    name: entryDelayTime
+    description: "Entry delay countdown time"
+    required: true
+    preferenceType: integer
+    definition:
+      default: 60
+      minimum: 1
+      maximum: 180
+  - title: "Exit delay (s)"
+    name: exitDelayTime
+    description: "Exit delay countdown time"
+    required: true
+    preferenceType: integer
+    definition:
+      default: 60
+      minimum: 1
+      maximum: 180
+  - title: "Doorbell sound"
+    name: doorBellSound
+    required: true
+    preferenceType: enumeration
+    definition:
+      options:
+        96: "Double beep"
+        97: "Guitar riff"
+        98: "Wind chimes"
+        99: "Ding dong"
+        100: "Ring default chime"
+      default: 96
+  - title: "Announcement audio volume"
+    name: announcementVolume
+    required: true
+    preferenceType: integer
+    definition:
+      default: 7
+      minimum: 0
+      maximum: 10
+  - title: "Key tone volume"
+    name: keyVolume
+    required: true
+    preferenceType: integer
+    definition:
+      default: 6
+      minimum: 0
+      maximum: 10
+  - title: "Siren volume"
+    name: sirenVolume
+    required: true
+    preferenceType: integer
+    definition:
+      default: 10
+      minimum: 0
+      maximum: 10
+  - title: "Long press emergency duration (s)"
+    name: emergencyDuration
+    description: "This parameter allows a user to configure the duration in seconds for the hold time required to capture a long press. This includes Emergency Button + Mode Buttons (Police, Fire, Medical, Disarmed, Home, Away)"
+    required: true
+    preferenceType: integer
+    definition:
+      default: 3
+      minimum: 2
+      maximum: 5
+  - title: "Long press number pad duration (s)"
+    name: longPressNumberDuration
+    description: "This parameter allows a user to configure the duration in seconds for the hold time required to capture a long press. This includes Number Pad + Check and X (0-9, Check, X)"
+    required: true
+    preferenceType: integer
+    definition:
+      default: 3
+      minimum: 2
+      maximum: 5
+  - title: "Proximity display timeout (s)"
+    name: proximityDisplayTimeout
+    description: "Timeout in seconds when proximity is detected and no input is received"
+    required: true
+    preferenceType: integer
+    definition:
+      default: 5
+      minimum: 0
+      maximum: 30
+  - title: "Button press display timeout (s)"
+    name: btnPressDisplayTimeout
+    description: "Timeout in seconds when any button is pressed, but a sequence is not completed and buttons are no longer being pressed"
+    required: true
+    preferenceType: integer
+    definition:
+      default: 5
+      minimum: 0
+      maximum: 30
+  - title: "Status change display timeout (s)"
+    name: statusChgDisplayTimeout
+    description: "Timeout in seconds when indicator command is received from the hub to change status"
+    required: true
+    preferenceType: integer
+    definition:
+      default: 5
+      minimum: 0 # some documentation says 1
+      maximum: 30
+  - title: "Security mode brightness"
+    name: securityModeBrightness
+    description: "Adjusts the brightness of the security mode buttons"
+    required: true
+    preferenceType: integer
+    definition:
+      default: 100
+      minimum: 0
+      maximum: 100
+  - title: "Key backlight brightness"
+    name: keyBacklightBrightness
+    description: "Adjusts the brightness of the keypad backlight. Used for Key Backlight LEDs only Available settings: 0-100%"
+    required: true
+    preferenceType: integer
+    definition:
+      default: 100
+      minimum: 0
+      maximum: 100
+  - title: "Ambient light sensor level"
+    name: ambientSensorLevel
+    description: "Light threshold where keypad will stop backlighting if higher than"
+    required: true
+    preferenceType: integer
+    definition:
+      default: 5 # another documentation says 20
+      minimum: 0
+      maximum: 100
+  - title: "Proximity on/off"
+    name: proximityOnOff
+    description: "Turn On and Off the Proximity Detection"
+    required: true
+    preferenceType: boolean
+    definition:
+      default: true
+  - title: "Ramp time"
+    name: rampTime
+    description: "Ramp time in milliseconds to turn the LEDs on/off. Applies to all LEDs on the keypad"
+    required: true
+    preferenceType: integer
+    definition:
+      default: 50
+      minimum: 0
+      maximum: 255
+  - title: "Low battery threshold"
+    name: lowBatteryTrshld
+    description: "The percentage level at which the display would turn on the yellow battery indicator (whenever the display is on)"
+    required: true
+    preferenceType: integer
+    definition:
+      default: 15 # another documentation says 30
+      minimum: 0
+      maximum: 100
+  - title: "Warn battery threshold"
+    name: warnBatteryTrshld
+    description: "The percentage level at which the display would turn on the red battery indicator (whenever the display is on)"
+    required: true
+    preferenceType: integer
+    definition:
+      default: 5 # another documentation says 10
+      minimum: 0
+      maximum: 100
+  - title: "Language set"
+    name: language
+    description: "Voice language"
+    required: true
+    preferenceType: enumeration
+    definition:
+      options:
+        0: "English (US)"
+        1: "English (UK)"
+        2: "French"
+        3: "German"
+        4: "Italian"
+        5: "Spanish"
+        6: "Dutch"
+        7: "Danish"
+        8: "Norwegian"
+        9: "Swedish"
+        10: "Finnish"
+        11: "Arabic"
+        12: "LANG_12"
+        13: "LANG_13"
+      default: 0
+  - title: "System security mode blink duration"
+    name: securityBlinkDuration
+    description: "Configurable ON time for the blink for config 'System security mode display' which allows us to modify the time for the LED to be active when set to blink on a period"
+    required: true
+    preferenceType: integer
+    definition:
+      default: 2
+      minimum: 1
+      maximum: 60
+  - title: "System security mode display"
+    name: securityModeDisplay
+    description: "(Always, Sometimes, Never). 601 = Always On, 1 - 600 = periodic interval, 0 = Always Off, except when there's activity"
+    required: true
+    preferenceType: integer
+    definition:
+      default: 0
+      minimum: 0
+      maximum: 601
