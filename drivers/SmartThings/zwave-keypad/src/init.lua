@@ -10,7 +10,7 @@ local zwave_keypad_template = {
     capabilities.battery,
   },
   sub_drivers = {
---    require("ring-gen2")
+    require("ring-gen2")
   },
 }
 
