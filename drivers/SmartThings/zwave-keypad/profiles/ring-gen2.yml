@@ -164,6 +164,14 @@ preferences:
         99: "Ding dong"
         100: "Ring default chime"
       default: 96
+  - title: "Doorbell volume"
+    name: doorbellVolume
+    required: true
+    preferenceType: integer
+    definition:
+      default: 7
+      minimum: 0
+      maximum: 10
   - title: "Announcement audio volume"
     name: announcementVolume
     required: true
