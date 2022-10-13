@@ -1831,6 +1831,11 @@ zigbeeManufacturer:
     manufacturer: Philips
     model: LST002
     deviceProfileName: rgbw-bulb
+  - id: Philips/LCA008
+    deviceLabel: Philips Light
+    manufacturer: Signify Netherlands B.V.
+    model: LCA008
+    deviceProfileName: rgbw-bulb
   - id: GLEDOPTO/GL-B-001Z
     deviceLabel: XLSmart Light
     manufacturer: GLEDOPTO
