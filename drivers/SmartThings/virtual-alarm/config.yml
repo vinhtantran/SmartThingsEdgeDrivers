@@ -1,0 +1,4 @@
+name: 'Virtual Alarm'
+packageKey: 'virtual-alarm'
+permissions:
+  discovery: {}

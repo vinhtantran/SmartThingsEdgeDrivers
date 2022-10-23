@@ -1,0 +1,8 @@
+name: virtual-alarm
+components:
+  - id: main
+    capabilities:
+      - id: alarm
+        version: 1
+    categories:
+    - name: Siren

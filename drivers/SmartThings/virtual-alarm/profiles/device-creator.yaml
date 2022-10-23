@@ -1,0 +1,6 @@
+name: device-creator
+components:
+  - id: main
+    capabilities:
+      - id: momentary
+        version: 1
