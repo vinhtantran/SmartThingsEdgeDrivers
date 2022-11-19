@@ -27,14 +27,21 @@ local CentralScene = (require "st.zwave.CommandClass.CentralScene")({version=3})
 local INOVELLI_MANUFACTURER_ID = 0x031E
 local INOVELLI_LZW31SN_PRODUCT_TYPE = 0x0001
 local INOVELLI_DIMMER_PRODUCT_ID = 0x0001
+local LED_BAR_COMPONENT_NAME = "LEDColorConfiguration"
+
+local supported_button_values = {
+  ["button1"] = {"pushed", "pushed_2x", "pushed_3x", "pushed_4x", "pushed_5x"},
+  ["button2"] = {"pushed", "pushed_2x", "pushed_3x", "pushed_4x", "pushed_5x"},
+  ["button3"] = {"pushed"}
+}
 
 local function device_added(driver, device)
   for _, component in pairs(device.profile.components) do
-    if component.id ~= "main" then
+    if component.id ~= "main" and component.id ~= LED_BAR_COMPONENT_NAME then
       device:emit_component_event(
         component,
         capabilities.button.supportedButtonValues(
-          {"pushed","held","down_hold","pushed_2x","pushed_3x","pushed_4x","pushed_5x"},
+          supported_button_values[component.id],
           { visibility = { displayed = false } }
         )
       )
@@ -47,16 +54,15 @@ local function device_added(driver, device)
   device:refresh()
 end
 
-local function button_to_component(buttonId)
-  if buttonId > 0 then
-    return string.format("button%d", buttonId)
-  end
-end
+local map_scene_number_to_component = {
+  [1] = "button2",
+  [2] = "button1",
+  [3] = "button3"
+}
+
 
 local map_key_attribute_to_capability = {
   [CentralScene.key_attributes.KEY_PRESSED_1_TIME] = capabilities.button.button.pushed,
-  [CentralScene.key_attributes.KEY_RELEASED] = capabilities.button.button.held,
-  [CentralScene.key_attributes.KEY_HELD_DOWN] = capabilities.button.button.down_hold,
   [CentralScene.key_attributes.KEY_PRESSED_2_TIMES] = capabilities.button.button.pushed_2x,
   [CentralScene.key_attributes.KEY_PRESSED_3_TIMES] = capabilities.button.button.pushed_3x,
   [CentralScene.key_attributes.KEY_PRESSED_4_TIMES] = capabilities.button.button.pushed_4x,
@@ -65,7 +71,6 @@ local map_key_attribute_to_capability = {
 
 local function central_scene_notification_handler(self, device, cmd)
   if ( cmd.args.scene_number ~= nil and cmd.args.scene_number ~= 0 ) then
-    local button_number = cmd.args.scene_number
     local capability_attribute = map_key_attribute_to_capability[cmd.args.key_attributes]
     local additional_fields = {
       state_change = true
@@ -78,7 +83,7 @@ local function central_scene_notification_handler(self, device, cmd)
 
     if event ~= nil then
       -- device reports scene notifications from endpoint 0 (main) but central scene events have to be emitted for button components: 1,2,3
-      local comp = device.profile.components[button_to_component(button_number)]
+      local comp = device.profile.components[map_scene_number_to_component[cmd.args.scene_number]]
       if comp ~= nil then
         device:emit_component_event(comp, event)
       end

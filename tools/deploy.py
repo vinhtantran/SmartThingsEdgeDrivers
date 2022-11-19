@@ -19,6 +19,8 @@ VERSION = "version"
 ARCHIVEHASH = "archiveHash"
 PACKAGEKEY = "packageKey"
 
+BOSE_APPKEY = os.environ.get("BOSE_AUDIONOTIFICATION_APPKEY")
+
 print(ENVIRONMENT_URL)
 
 # Make sure we're running in the root of the git directory
@@ -75,7 +77,19 @@ for driver in drivers:
   with open(driver+"/config.yml", 'r') as config_file:
     package_key = yaml.safe_load(config_file)["packageKey"]
     print(package_key)
-  subprocess.run(["zip -r ../edge.zip config.yml fingerprints.yml $(find profiles -name \"*.y*ml\") $(find . -name \"*.lua\") -x \"*test*\""], cwd=driver, shell=True,  capture_output=True)
+  if package_key == "bose" and BOSE_APPKEY:
+    # write the app key into a app_key.lua (overwrite if exists already)
+    subprocess.run(["touch -a ./src/app_key.lua && echo \'return \"" + BOSE_APPKEY +  "\"\n\' > ./src/app_key.lua"], cwd=driver, shell=True, capture_output=True)
+  retries = 0
+  while not os.path.exists("edge.zip") or retries >= 5:
+    try:
+      subprocess.run(["zip -r ../edge.zip config.yml fingerprints.yml $(find profiles -name \"*.y*ml\") $(find . -name \"*.lua\") -x \"*test*\""], cwd=driver, shell=True, capture_output=True, check=True)
+    except subprocess.CalledProcessError as error:
+      print(error.stderr)
+    retries += 1
+  if retries >= 5:
+    print("5 zip failires, skipping "+package_key+" and continuing.")
+    continue
   with open("edge.zip", 'rb') as driver_package:
     data = driver_package.read()
     # TODO: This does not yet work, hash returned by server does not match
