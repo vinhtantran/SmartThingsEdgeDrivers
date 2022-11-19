@@ -4,9 +4,14 @@ zigbeeManufacturer:
     manufacturer: LUMI
     model: lumi.sensor_ht.agl02
     deviceProfileName: humidity-temp-battery-aqara
-  - id: "Tuya/Temp/Humidity"
+  - id: "Tuya/Temp/Humidity/avdnvykf"
     deviceLabel: Temperature Sensor
     manufacturer: _TZ2000_avdnvykf
+    model: TS0201
+    deviceProfileName: humidity-temp-battery-tuya
+  - id: "Tuya/Temp/Humidity/a476raq2"
+    deviceLabel: Temperature Sensor
+    manufacturer: _TZ2000_a476raq2
     model: TS0201
     deviceProfileName: humidity-temp-battery-tuya
   - id: "eZEX/E282-KR0B0Z1-HA"

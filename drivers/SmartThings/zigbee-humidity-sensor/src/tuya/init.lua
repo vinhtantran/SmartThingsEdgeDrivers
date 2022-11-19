@@ -7,7 +7,7 @@ local capabilities = require "st.capabilities"
 
 
 local is_tuya_temperature_sensor = function(opts, driver, device)
-  return device:get_manufacturer() == "_TZ2000_avdnvykf" and device:get_model() == "TS0201"
+  return device:get_manufacturer():find("_TZ2000") == 1 and device:get_model() == "TS0201"
 end
 
 local battery_percentage_remaining_handler = function(driver, device, value, zb_rx)
