@@ -1,0 +1,25 @@
+name: humidity-temp-battery-tuya
+components:
+  - id: main
+    capabilities:
+      - id: temperatureMeasurement
+        version: 1
+      - id: relativeHumidityMeasurement
+        version: 1
+      - id: battery
+        version: 1
+      - id: firmwareUpdate
+        version: 1
+      - id: refresh
+        version: 1
+    categories:
+      - name: Thermostat
+preferences:
+  - preferenceId: tempOffset
+    explicit: true
+  - preferenceId: humidityOffset
+    explicit: true
+# TODO: add the presentation with temperature and humidity in dashboard
+#metadata:
+#  mnmn: SmartThingsCommunity
+#  vid: 5f60cb9b-427b-3e7b-a44a-d1543ed07c79
