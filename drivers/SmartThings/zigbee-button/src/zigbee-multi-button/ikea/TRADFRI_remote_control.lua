@@ -22,6 +22,10 @@ local OnOff = clusters.OnOff
 local Scenes = clusters.Scenes
 local PowerConfiguration = clusters.PowerConfiguration
 
+local function supported_number_of_buttons(device)
+  return device:get_model() == "TRADFRI remote control" and 5 or 4
+end
+
 local function build_button_payload_handler(pressed_type)
   return function(driver, device, zb_rx)
     local additional_fields = {
@@ -45,6 +49,7 @@ local function build_button_payload_handler(pressed_type)
 end
 
 local function added_handler(self, device)
+  local number_of_buttons = supported_number_of_buttons(device)
   for comp_name, comp in pairs(device.profile.components) do
     if comp_name == "button5" then
       device:emit_component_event(comp, capabilities.button.supportedButtonValues({"pushed"}, {visibility = { displayed = false }}))
@@ -52,7 +57,7 @@ local function added_handler(self, device)
       device:emit_component_event(comp, capabilities.button.supportedButtonValues({"pushed", "held"}, {visibility = { displayed = false }}))
     end
     if comp_name == "main" then
-      device:emit_component_event(comp, capabilities.button.numberOfButtons({value = 5}, {visibility = { displayed = false }}))
+      device:emit_component_event(comp, capabilities.button.numberOfButtons({value = number_of_buttons}, {visibility = { displayed = false }}))
     else
       device:emit_component_event(comp, capabilities.button.numberOfButtons({value = 1}, {visibility = { displayed = false }}))
     end
@@ -66,7 +71,9 @@ local remote_control = {
   zigbee_handlers = {
     cluster = {
       [OnOff.ID] = {
-        [OnOff.server.commands.Toggle.ID] = button_utils.build_button_handler("button5", capabilities.button.button.pushed)
+        [OnOff.server.commands.Toggle.ID] = button_utils.build_button_handler("button5", capabilities.button.button.pushed),
+        [OnOff.server.commands.On.ID] = button_utils.build_button_handler("button1", capabilities.button.button.pushed),
+        [OnOff.server.commands.Off.ID] = button_utils.build_button_handler("button3", capabilities.button.button.pushed)
       },
       [Level.ID] = {
         [Level.server.commands.Move.ID] = button_utils.build_button_handler("button3", capabilities.button.button.held),
@@ -85,7 +92,7 @@ local remote_control = {
     added = added_handler
   },
   can_handle = function(opts, driver, device, ...)
-    return device:get_model() == "TRADFRI remote control"
+    return device:get_model() == "TRADFRI remote control" or device:get_model() == "Remote Control N2"
   end
 }
 
