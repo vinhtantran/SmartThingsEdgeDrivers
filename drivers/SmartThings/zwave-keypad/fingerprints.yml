@@ -5,8 +5,7 @@ zwaveManufacturer:
     productType: 0x0101
     productId: 0x0401
     deviceProfileName: ring-gen2
-zwaveManufacturer:
-  - id: Ring/Keypad2ndGen
+  - id: Ring/Keypad2ndGenUS
     deviceLabel: Ring Keypad 2nd Gen
     manufacturerId: 0x0346
     productType: 0x0101
